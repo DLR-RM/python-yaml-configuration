@@ -2,7 +2,7 @@ PTVERSION           = 2
 NAME                = python_yaml_configuration
 MAINTAINER          = Sebastian Brunner <sebastian.brunner@dlr.de>
 DESCRIPTION         = This module offers easy configuration for a other modules or startup scripts
-VERSION             = 0.0.1
+VERSION             = 0.0.2
 DOCUMENTATION       = http://www.google.de
 SUPPORTED_LANGUAGES = python
 DEPENDS =
@@ -11,5 +11,5 @@ ARCHS               = sled11-x86-gcc4.x, sled11-x86_64-gcc4.x, osl42-x86_64
 PYTHON_PATHS        = ${PKGROOT}/lib/python2.7
 
 [install]
-python/yaml_configuration => lib/python2.7/yaml_configuration
+python/yaml_configuration | !*.pyc => lib/python2.7/yaml_configuration
 
