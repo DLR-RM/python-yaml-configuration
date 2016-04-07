@@ -1,0 +1,16 @@
+PTVERSION           = 2
+NAME                = python_acknowledged_udp
+MAINTAINER          = Sebastian Brunner <sebastian.brunner@dlr.de>
+DESCRIPTION         = This module offers secure connection over the unsecure UDP/IP protocoll
+VERSION             = 0.0.1
+DOCUMENTATION       = http://www.google.de
+SUPPORTED_LANGUAGES = python
+DEPENDS =
+DEPENDS.sled11*     = gtk_etc==0, gtk_etc_python==0
+
+ARCHS               = sled11-x86-gcc4.x, sled11-x86_64-gcc4.x, osl42-x86_64
+PYTHON_PATHS        = ${PKGROOT}/lib/python2.7
+
+[install]
+python/${NAME} => lib/python2.7/${NAME}
+
