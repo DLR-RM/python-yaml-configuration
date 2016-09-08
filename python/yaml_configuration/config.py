@@ -9,7 +9,7 @@
 """
 
 import os
-from os.path import expanduser, expandvars, isdir
+from os.path import expanduser, expandvars, isdir, isfile
 import yaml
 import argparse
 import logging
@@ -45,7 +45,7 @@ def config_path(path):
     path = expanduser(path)
     # e.g. replace ${RAFCON_PATH} with the root path of RAFCON
     path = expandvars(path)
-    if not isdir(path):
+    if not isfile(path) and not isdir(path):
         raise argparse.ArgumentTypeError("{0} is not a valid path".format(path))
     if os.access(path, os.R_OK):
         return path
