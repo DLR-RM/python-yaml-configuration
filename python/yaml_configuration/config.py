@@ -71,44 +71,48 @@ class DefaultConfig(object):
             self.__config_dict = yaml.load(self.default_config)
 
     def load(self, config_file, path=None):
-        assert isinstance(config_file, str)
-        if path is None:
-            path = os.path.join(os.path.expanduser('~'), '.config', 'rafcon')
+        try:
+            assert isinstance(config_file, str)
+            if path is None:
+                path = os.path.join(os.path.expanduser('~'), '.config', 'rafcon')
 
-        if not os.path.exists(path):
-            self.logger.warn('No configuration found at {0}, using temporary default config and create path on file system.'
-                        ''.format(path))
-            os.makedirs(path)
+            if not os.path.exists(path):
+                self.logger.warn('No configuration found at {0}, using temporary default config and create path on file'
+                                 'system.'.format(path))
+                os.makedirs(path)
 
-        config_file_path = os.path.join(path, config_file)
+            config_file_path = os.path.join(path, config_file)
 
-        # If no config file is found, create one in the desired directory
-        if not os.path.isfile(config_file_path):
-            try:
-                if not os.path.exists(path):
-                    os.makedirs(path)
-                write_dict_to_yaml(self.__config_dict, config_file_path, width=80, default_flow_style=False)
-                self.config_file_path = config_file_path
-                self.logger.debug("Created config file {0}".format(config_file_path))
-            except Exception as e:
-                self.logger.error('Could not write to config {0}, using temporary default configuration. '
-                             'Error: {1}'.format(config_file_path, e))
-        # Otherwise read the config file from the specified directory
-        else:
-            try:
-                self.__config_dict = load_dict_from_yaml(config_file_path)
-                self.config_file_path = config_file_path
-                self.logger.debug("Configuration loaded from {0}".format(os.path.abspath(config_file_path)))
-            except Exception as e:
-                self.logger.error('Could not read from config {0}, using temporary default configuration. '
-                             'Error: {1}'.format(config_file_path, e))
+            # If no config file is found, create one in the desired directory
+            if not os.path.isfile(config_file_path):
+                try:
+                    if not os.path.exists(path):
+                        os.makedirs(path)
+                    write_dict_to_yaml(self.__config_dict, config_file_path, width=80, default_flow_style=False)
+                    self.config_file_path = config_file_path
+                    self.logger.debug("Created config file {0}".format(config_file_path))
+                except Exception as e:
+                    self.logger.error('Could not write to config {0}, using temporary default configuration. '
+                                      'Error: {1}'.format(config_file_path, e))
+            # Otherwise read the config file from the specified directory
+            else:
+                try:
+                    self.__config_dict = load_dict_from_yaml(config_file_path)
+                    self.config_file_path = config_file_path
+                    self.logger.debug("Configuration loaded from {0}".format(os.path.abspath(config_file_path)))
+                except Exception as e:
+                    self.logger.error('Could not read from config {0}, using temporary default configuration. '
+                                      'Error: {1}'.format(config_file_path, e))
 
-            # Check if all attributes of the default config exists and introduce them if missing
-            default_config_dict = yaml.load(self.default_config) if self.default_config else {}
-            for k, v in default_config_dict.iteritems():
-                if k not in self.__config_dict:
-                    self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
-                    self.__config_dict[k] = v
+                # Check if all attributes of the default config exists and introduce them if missing
+                default_config_dict = yaml.load(self.default_config) if self.default_config else {}
+                for k, v in default_config_dict.iteritems():
+                    if k not in self.__config_dict:
+                        self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
+                        self.__config_dict[k] = v
+        finally:
+            if not isinstance(self.__config_dict, dict):  # Ensure config_dict is always a dict
+                self.__config_dict = {}
 
         self.path = path
 
