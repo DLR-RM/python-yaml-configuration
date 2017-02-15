@@ -2,7 +2,6 @@ PTVERSION           = 2
 NAME                = python_yaml_configuration
 MAINTAINER          = Sebastian Brunner <sebastian.brunner@dlr.de>
 DESCRIPTION         = This module offers easy configuration for a other modules or startup scripts
-VERSION             = 0.0.3
 DOCUMENTATION       = http://www.google.de
 SUPPORTED_LANGUAGES = python
 DEPENDS =
