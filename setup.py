@@ -10,7 +10,7 @@ setup(
     maintainer='Sebastian Brunner',
     author_email='sebastian.brunner@dlr.de',
     maintainer_email='sebastian.brunner@dlr.de',
-    description='This python module can be used easily read and write to yaml config files.',
+    description='A python module to easily read from and write to yaml config files.',
     keywords=('yaml', 'configuration'),
 
     packages=find_packages('python'),  # include all packages under python
