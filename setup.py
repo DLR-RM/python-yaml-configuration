@@ -16,6 +16,16 @@ setup(
     packages=find_packages('python'),  # include all packages under python
     package_dir={'': 'python'},   # tell distutils packages are under python
 
+    # works but not sufficient => see MANIFEST.in for extra files to include
+    # package_data={'': ['*basic_config.yaml']},
+    # package_data={'yaml_configuration': ['*basic_config.yaml']},
+
+    # does not work
+    # package_data={'': ['yaml_configuration/basic_config.yaml']},
+    # package_data={'python': ['*basic_config.yaml']},
+    # include_package_data=True,
+    # data_files=[('yaml_configuration', ['/etc/locale.conf'])],
+
     python_requires='<=2.7',
     setup_requires=['pytest-runner'],
     install_requires=[],
