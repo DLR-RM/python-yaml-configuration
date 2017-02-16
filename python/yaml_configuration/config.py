@@ -1,9 +1,9 @@
 """
-.. module:: config_base
+.. module:: config
    :platform: Unix, Windows
-   :synopsis: A module to represent configurations inside RAFCON
+   :synopsis: A python module to easily read from and write to yaml config files.
 
-.. moduleauthor:: TODO
+.. moduleauthor:: Sebastian Brunner
 
 
 """
@@ -43,7 +43,6 @@ def config_path(path):
         return None
     # replace ~ with /home/user
     path = expanduser(path)
-    # e.g. replace ${RAFCON_PATH} with the root path of RAFCON
     path = expandvars(path)
     if not isfile(path) and not isdir(path):
         raise argparse.ArgumentTypeError("{0} is not a valid path".format(path))
@@ -56,8 +55,9 @@ def config_path(path):
 class DefaultConfig(object):
     """Class to hold and load the global configurations."""
 
-    def __init__(self, default_config, logger_object=None):
+    def __init__(self, default_config, logger_object=None, rel_config_path='rafcon'):
         self.logger = logger_object
+        self.rel_config_path = rel_config_path
         if logger_object is None:
             self.logger = logging.getLogger(__name__)
         assert isinstance(default_config, str)
@@ -74,7 +74,7 @@ class DefaultConfig(object):
         try:
             assert isinstance(config_file, str)
             if path is None:
-                path = os.path.join(os.path.expanduser('~'), '.config', 'rafcon')
+                path = os.path.join(os.path.expanduser('~'), '.config', self.rel_config_path)
 
             if not os.path.exists(path):
                 self.logger.warn('No configuration found at {0}, using temporary default config and create path on file'

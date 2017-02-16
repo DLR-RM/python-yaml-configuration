@@ -9,37 +9,30 @@
 """
 
 import os
-from os import path
 import logging
-from yaml_configuration.config import DefaultConfig
+from pytest import raises
+from yaml_configuration.config import DefaultConfig, ConfigError
 
 
-def read_file(file_path, filename=None):
-    file_path = os.path.realpath(file_path)
-    if filename:
-        file_path = os.path.join(file_path, filename)
-
-    file_content = ""
-    if os.path.isfile(file_path):
-        with open(file_path, 'r') as file_pointer:
-            file_content = file_pointer.read()
-
+def read_file(file_path, filename):
+    file_path = os.path.join(file_path, filename)
+    with open(file_path, 'r') as file_pointer:
+        file_content = file_pointer.read()
     return file_content
-
-
-CONFIG_FILE = "basic_config.yaml"
-DEFAULT_CONFIG = read_file(path.dirname(__file__), CONFIG_FILE)
 
 
 class BasicConfig(DefaultConfig):
 
-    def __init__(self, logger_object=None):
-        super(BasicConfig, self).__init__(DEFAULT_CONFIG, logger_object)
-        self.load(CONFIG_FILE, path=path.dirname(__file__))
+    def __init__(self, config_string, config_file, logger_object=None):
+        super(BasicConfig, self).__init__(config_string, logger_object)
+        # this is already done in the init
+        # self.load(config_file, path=os.path.dirname(__file__))
 
 
 def test_basic_config():
-    basic_config = BasicConfig(logging.getLogger("TestLogger"))
+    config_file = "basic_config.yaml"
+    config_string = read_file(os.path.dirname(__file__), config_file)
+    basic_config = BasicConfig(config_string, config_file, logging.getLogger("TestLogger"))
     assert basic_config.get_config_value("BOOL_VALUE")
     assert basic_config.get_config_value("STRING_VALUE") == "test"
     assert basic_config.get_config_value("NUMBER_VALUE") == 42
@@ -47,6 +40,17 @@ def test_basic_config():
 
 
 if __name__ == '__main__':
-    test_basic_config()
+    config_file = "basic_config.yaml"
+    config_string = read_file(os.path.dirname(__file__), config_file)
+    basic_config = BasicConfig(config_string, config_file, logging.getLogger("TestLogger"))
+    basic_config.set_config_value("number_value", 10)
+    basic_config.set_config_value("string_value", "test_string")
+    assert basic_config.get_config_value("string_value") == "test_string"
+    assert basic_config.get_config_value("not_existing_config_value", default=42) == 42
+    with raises(ConfigError):
+        if not basic_config.get_config_value("value_that_should_exist"):
+            raise ConfigError("The config value with key 'value_that_should_exist' should exist")
+
+    # test_basic_config()
 
 
