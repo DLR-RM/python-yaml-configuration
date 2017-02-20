@@ -55,7 +55,7 @@ def config_path(path):
 class DefaultConfig(object):
     """Class to hold and load the global configurations."""
 
-    def __init__(self, default_config, logger_object=None, rel_config_path='rafcon'):
+    def __init__(self, default_config, logger_object=None, rel_config_path='yaml_configuration'):
         self.logger = logger_object
         self.rel_config_path = rel_config_path
         if logger_object is None:
