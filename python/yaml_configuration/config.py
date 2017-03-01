@@ -1,3 +1,5 @@
+# Copyright
+
 """
 .. module:: config
    :platform: Unix, Windows
