@@ -6,6 +6,7 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 # Contributors:
+# Franz Steinmetz <franz.steinmetz@dlr.de>
 # Sebastian Brunner <sebastian.brunner@dlr.de>
 
 from setuptools import setup, find_packages
@@ -13,7 +14,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='yaml_configuration',
-    version='0.1.0',
+    version='0.0.6',
     url='https://rmc-github.robotic.dlr.de/common/python_yaml_configuration',
     license='BSD',
     author='Sebastian Brunner',
