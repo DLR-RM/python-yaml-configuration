@@ -6,5 +6,12 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 # Contributors:
+# Franz Steinmetz <franz.steinmetz@dlr.de>
 # Sebastian Brunner <sebastian.brunner@dlr.de>
 
+from pkg_resources import get_distribution, DistributionNotFound
+
+try:
+    __version__ = get_distribution("yaml_configuration").version
+except DistributionNotFound:
+    __version__ = "unknown"
