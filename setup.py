@@ -36,7 +36,7 @@ setup(
     # include_package_data=True,
     # data_files=[('yaml_configuration', ['/etc/locale.conf'])],
 
-    python_requires='<=2.7',
+    python_requires='>=2.6, !=3.*',
     setup_requires=['pytest-runner'],
     install_requires=[],
     tests_require=['pytest'],
