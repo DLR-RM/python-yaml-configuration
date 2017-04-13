@@ -26,7 +26,18 @@ setup(
 
     packages=find_packages('python'),  # include all packages under python
     package_dir={'': 'python'},   # tell distutils packages are under python
-
+    
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Information Technology',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Utilities'
+],
     # works but not sufficient => see MANIFEST.in for extra files to include
     # package_data={'': ['*basic_config.yaml']},
     # package_data={'yaml_configuration': ['*basic_config.yaml']},
