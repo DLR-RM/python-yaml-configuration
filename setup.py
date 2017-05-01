@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='yaml_configuration',
-    version='0.0.6',
+    version='0.0.9',
     url='https://rmc-github.robotic.dlr.de/common/python_yaml_configuration',
     license='BSD',
     author='Sebastian Brunner',
