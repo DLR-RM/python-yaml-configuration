@@ -23,6 +23,10 @@
 import os
 from os.path import expanduser, expandvars, isdir, isfile
 import yaml
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 import argparse
 import logging
 
@@ -35,7 +39,7 @@ def write_dict_to_yaml(dictionary, path, **kwargs):
     :param kwargs: optional additional parameters for dumper
     """
     with open(path, 'w') as f:
-        yaml.dump(dictionary, f, indent=4, **kwargs)
+        yaml.dump(dictionary, f, Dumper=Dumper, indent=4, **kwargs)
 
 
 def load_dict_from_yaml(path):
@@ -45,7 +49,7 @@ def load_dict_from_yaml(path):
     :return:
     """
     f = file(path, 'r')
-    dictionary = yaml.load(f)
+    dictionary = yaml.load(f, Loader=Loader)
     f.close()
     return dictionary
 
