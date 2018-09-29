@@ -17,6 +17,7 @@
 
 
 """
+from __future__ import print_function
 
 import os
 import logging
@@ -46,7 +47,7 @@ def test_basic_config():
     assert basic_config.get_config_value("BOOL_VALUE")
     assert basic_config.get_config_value("STRING_VALUE") == "test"
     assert basic_config.get_config_value("NUMBER_VALUE") == 42
-    print "All test successful!"
+    print("All test successful!")
 
 
 if __name__ == '__main__':
