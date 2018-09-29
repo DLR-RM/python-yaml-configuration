@@ -14,8 +14,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='yaml_configuration',
-    version='0.0.9',
-    url='https://rmc-github.robotic.dlr.de/common/python_yaml_configuration',
+    version='0.1.0',
+    url='https://github.com/DLR-RM/python-yaml-configuration',
     license='BSD',
     author='Sebastian Brunner',
     maintainer='Sebastian Brunner',
@@ -35,6 +35,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
 ],
@@ -48,7 +49,7 @@ setup(
     # include_package_data=True,
     # data_files=[('yaml_configuration', ['/etc/locale.conf'])],
 
-    python_requires='>=2.6, !=3.*',
+    python_requires='>=2.6',
     setup_requires=['pytest-runner'],
     install_requires=[],
     tests_require=['pytest'],
