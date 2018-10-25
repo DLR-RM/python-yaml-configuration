@@ -82,9 +82,9 @@ class DefaultConfig(object):
         self.path = None
 
         if not default_config:
-            self.__config_dict = {}
+            self._config_dict = {}
         else:
-            self.__config_dict = yaml.load(self.default_config)
+            self._config_dict = yaml.load(self.default_config)
 
     def load(self, config_file, path=None):
         try:
@@ -104,7 +104,7 @@ class DefaultConfig(object):
                 try:
                     if not os.path.exists(path):
                         os.makedirs(path)
-                    write_dict_to_yaml(self.__config_dict, config_file_path, width=80, default_flow_style=False)
+                    write_dict_to_yaml(self._config_dict, config_file_path, width=80, default_flow_style=False)
                     self.config_file_path = config_file_path
                     self.logger.debug("Created config file {0}".format(config_file_path))
                 except Exception as e:
@@ -113,7 +113,7 @@ class DefaultConfig(object):
             # Otherwise read the config file from the specified directory
             else:
                 try:
-                    self.__config_dict = load_dict_from_yaml(config_file_path)
+                    self._config_dict = load_dict_from_yaml(config_file_path)
                     self.config_file_path = config_file_path
                     self.logger.debug("Configuration loaded from {0}".format(os.path.abspath(config_file_path)))
                 except Exception as e:
@@ -123,12 +123,12 @@ class DefaultConfig(object):
                 # Check if all attributes of the default config exists and introduce them if missing
                 default_config_dict = yaml.load(self.default_config) if self.default_config else {}
                 for k, v in default_config_dict.iteritems():
-                    if k not in self.__config_dict:
+                    if k not in self._config_dict:
                         self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
-                        self.__config_dict[k] = v
+                        self._config_dict[k] = v
         finally:
-            if not isinstance(self.__config_dict, dict):  # Ensure config_dict is always a dict
-                self.__config_dict = {}
+            if not isinstance(self._config_dict, dict):  # Ensure config_dict is always a dict
+                self._config_dict = {}
 
         self.path = path
 
@@ -139,8 +139,8 @@ class DefaultConfig(object):
         :param default: what to return if the key is not found
         :return: The value for the given key, if the key was found. Otherwise the default value
         """
-        if key in self.__config_dict:
-            return self.__config_dict[key]
+        if key in self._config_dict:
+            return self._config_dict[key]
         return default
 
     def set_config_value(self, key, value):
@@ -149,11 +149,11 @@ class DefaultConfig(object):
         :param key: the key to the configuration value
         :param value: The new value to be set for the given key
         """
-        self.__config_dict[key] = value
+        self._config_dict[key] = value
 
     def save_configuration(self):
         if self.config_file_path:
-            write_dict_to_yaml(self.__config_dict, self.config_file_path, width=80, default_flow_style=False)
+            write_dict_to_yaml(self._config_dict, self.config_file_path, width=80, default_flow_style=False)
             self.logger.debug("Saved configuration to {0}".format(self.config_file_path))
 
 
