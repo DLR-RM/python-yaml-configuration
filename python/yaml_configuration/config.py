@@ -86,6 +86,9 @@ class DefaultConfig(object):
         else:
             self._config_dict = yaml.load(self.default_config)
 
+    def get_all_keys(self):
+        return self._config_dict.keys()
+
     def load(self, config_file, path=None):
         try:
             assert isinstance(config_file, str)
