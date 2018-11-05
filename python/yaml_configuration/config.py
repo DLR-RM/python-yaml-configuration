@@ -156,7 +156,7 @@ class DefaultConfig(object):
             write_dict_to_yaml(self._config_dict, self.config_file_path, width=80, default_flow_style=False)
             self.logger.debug("Saved configuration to {0}".format(self.config_file_path))
         else:
-            self.logger.warning(("The config_file_path needs to be set for {0}".format(self.__class__.__name__)))
+            self.logger.warning("The config_file_path needs to be set for {0}".format(self.__class__.__name__))
 
 
 class ConfigError(Exception):
