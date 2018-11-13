@@ -130,7 +130,7 @@ class DefaultConfig(object):
 
                 # Check if all attributes of the default config exists and introduce them if missing
                 default_config_dict = yaml.load(self.default_config) if self.default_config else {}
-                for k, v in default_config_dict.iteritems():
+                for k, v in default_config_dict.items():
                     if k not in self._config_dict:
                         self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
                         self._config_dict[k] = v
