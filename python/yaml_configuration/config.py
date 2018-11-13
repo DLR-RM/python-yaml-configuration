@@ -48,7 +48,7 @@ def load_dict_from_yaml(path):
     :param path: the absolute path of the target yaml file
     :return:
     """
-    f = file(path, 'r')
+    f = open(path, 'r')
     dictionary = yaml.load(f, Loader=Loader)
     f.close()
     return dictionary
