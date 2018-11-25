@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='yaml_configuration',
-    version='0.1.0',
+    version='0.1.1',
     url='https://github.com/DLR-RM/python-yaml-configuration',
     license='BSD',
     author='Sebastian Brunner',
