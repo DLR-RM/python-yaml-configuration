@@ -9,12 +9,23 @@
 # Franz Steinmetz <franz.steinmetz@dlr.de>
 # Sebastian Brunner <sebastian.brunner@dlr.de>
 
+import os
 from setuptools import setup, find_packages
 
+root_path = os.path.dirname(os.path.abspath(__file__))
+
+readme_file_path = os.path.join(root_path, "README.rst")
+with open(readme_file_path, "r") as f:
+    long_description = f.read()
+
+version_file_path = os.path.join(root_path, "VERSION")
+with open(version_file_path, "r") as f:
+    content = f.read().splitlines()
+    version = content[0]
 
 setup(
     name='yaml_configuration',
-    version='0.1.1',
+    version=version,
     url='https://github.com/DLR-RM/python-yaml-configuration',
     license='BSD',
     author='Sebastian Brunner',
@@ -22,6 +33,7 @@ setup(
     author_email='sebastian.brunner@dlr.de',
     maintainer_email='sebastian.brunner@dlr.de',
     description='A python module to easily read from and write to yaml config files.',
+    long_description=long_description,
     keywords=('yaml', 'configuration'),
 
     packages=find_packages('python'),  # include all packages under python
