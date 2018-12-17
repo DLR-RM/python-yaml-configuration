@@ -38,7 +38,9 @@ setup(
 
     packages=find_packages('python'),  # include all packages under python
     package_dir={'': 'python'},   # tell distutils packages are under python
-    
+
+    data_files=[("./", ["VERSION"])],
+
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
