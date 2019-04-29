@@ -65,7 +65,7 @@ setup(
 
     python_requires='>=2.6',
     setup_requires=['pytest-runner'],
-    install_requires=[],
+    install_requires=['pyyaml>=5.1'],
     tests_require=['pytest'],
 
     zip_safe=True
