@@ -38,6 +38,9 @@ def write_dict_to_yaml(dictionary, path, **kwargs):
     :param path: the absolute path of the target yaml file
     :param kwargs: optional additional parameters for dumper
     """
+    directory = os.path.dirname(path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with open(path, 'w') as f:
         yaml.dump(dictionary, f, Dumper=Dumper, indent=4, **kwargs)
 

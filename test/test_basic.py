@@ -47,7 +47,21 @@ def test_basic_config():
     assert basic_config.get_config_value("BOOL_VALUE")
     assert basic_config.get_config_value("STRING_VALUE") == "test"
     assert basic_config.get_config_value("NUMBER_VALUE") == 42
-    print("All test successful!")
+    print("test_basic_config test successful!")
+
+
+def test_write_to_not_existing_location():
+    config_file = "basic_config.yaml"
+    config_string = read_file(os.path.dirname(__file__), config_file)
+    basic_config = BasicConfig(config_string, config_file, logging.getLogger("TestLogger"))
+    import tempfile
+    target_config_dir = os.path.join(tempfile.gettempdir(), "yaml_configuration_test_folder")
+    target_config_file = os.path.join(target_config_dir, "test_config.yaml")
+    basic_config.config_file_path = target_config_file
+    basic_config.save_configuration()
+    import shutil
+    shutil.rmtree(target_config_dir)
+    print("test_write_to_not_existing_location test successful!")
 
 
 if __name__ == '__main__':
@@ -63,5 +77,6 @@ if __name__ == '__main__':
             raise ConfigError("The config value with key 'value_that_should_exist' should exist")
 
     # test_basic_config()
+    test_write_to_not_existing_location()
 
 
