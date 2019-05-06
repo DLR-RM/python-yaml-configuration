@@ -87,7 +87,7 @@ class DefaultConfig(object):
         if not default_config:
             self._config_dict = {}
         else:
-            self._config_dict = yaml.load(self.default_config)
+            self._config_dict = yaml.safe_load(self.default_config)
 
     def get_all_keys(self):
         """ Hand list of keys
@@ -132,7 +132,7 @@ class DefaultConfig(object):
                                       'Error: {1}'.format(config_file_path, e))
 
                 # Check if all attributes of the default config exists and introduce them if missing
-                default_config_dict = yaml.load(self.default_config) if self.default_config else {}
+                default_config_dict = yaml.safe_load(self.default_config) if self.default_config else {}
                 for k, v in default_config_dict.items():
                     if k not in self._config_dict:
                         self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
