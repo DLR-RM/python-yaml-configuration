@@ -5,7 +5,7 @@ DESCRIPTION         = This module offers easy configuration for a other modules 
 DOCUMENTATION       = https://rmc-github.robotic.dlr.de/common/python_yaml_configuration
 SUPPORTED_LANGUAGES = python
 
-DEPENDS             = sw.common.pyyaml==5.1
+DEPENDS             =
 DEPENDS.osl*        = sw.common.pyyaml==5.1
 
 ARCHS               = sled11-x86-gcc4.x, sled11-x86_64-gcc4.x, osl42-x86_64
