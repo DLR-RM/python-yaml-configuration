@@ -113,9 +113,9 @@ class DefaultConfig(object):
             # If no config file is found, create one in the desired directory
             if not os.path.isfile(config_file_path):
                 try:
-                    if not os.path.exists(path):
-                        os.makedirs(path)
-                    write_dict_to_yaml(self._config_dict, config_file_path, width=80, default_flow_style=False)
+                    default_config_dict = yaml.load(self.default_config, Loader=FullLoader) if self.default_config \
+                        else {}
+                    write_dict_to_yaml(default_config_dict, config_file_path, width=80, default_flow_style=False)
                     self.config_file_path = config_file_path
                     self.logger.debug("Created config file {0}".format(config_file_path))
                 except Exception as e:
@@ -133,10 +133,30 @@ class DefaultConfig(object):
 
                 # Check if all attributes of the default config exists and introduce them if missing
                 default_config_dict = yaml.load(self.default_config, Loader=FullLoader) if self.default_config else {}
-                for k, v in default_config_dict.items():
-                    if k not in self._config_dict:
-                        self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(type(self).__name__, k, v))
-                        self._config_dict[k] = v
+                value_changed = False
+                for config_key, default_value in default_config_dict.items():
+                    if config_key in self._config_dict:
+                        # fill dict and list values
+                        if isinstance(default_value, dict):
+                            for sub_key, sub_default_value in default_value.items():
+                                if sub_key not in self._config_dict[config_key]:
+                                    self._config_dict[config_key][sub_key] = sub_default_value
+                                    value_changed = True
+                        if isinstance(default_value, list):
+                            for element in default_value:
+                                if element not in self._config_dict[config_key]:
+                                    self._config_dict[config_key].append(element)
+                                    value_changed = True
+                    else:
+                        self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(
+                            type(self).__name__, config_key, default_value))
+                        self._config_dict[config_key] = default_value
+                        value_changed = True
+                if value_changed:
+                    self.logger.debug("The config has been updated by the default config "
+                                      "and is saved to disk (path: {}).".format(str(self.config_file_path)))
+                    self.save_configuration()
+
         finally:
             if not isinstance(self._config_dict, dict):  # Ensure config_dict is always a dict
                 self._config_dict = {}
