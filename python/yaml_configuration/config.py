@@ -153,7 +153,7 @@ class DefaultConfig(object):
                         self._config_dict[config_key] = default_value
                         value_changed = True
                 if value_changed:
-                    self.logger.debug("The config has been updated by the default config "
+                    self.logger.info("The config has been updated by the default config "
                                       "and is saved to disk (path: {}).".format(str(self.config_file_path)))
                     self.save_configuration()
 
