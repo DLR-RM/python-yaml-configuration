@@ -74,7 +74,10 @@ def config_path(path):
 class DefaultConfig(object):
     """Class to hold and load the global configurations."""
 
-    def __init__(self, default_config, logger_object=None, rel_config_path='yaml_configuration'):
+    keys_not_to_fill_up = set()
+
+    def __init__(self, default_config, logger_object=None, rel_config_path='yaml_configuration',
+                 keys_to_not_fill_up=None):
         self.logger = logger_object
         self.rel_config_path = rel_config_path
         if logger_object is None:
@@ -136,17 +139,18 @@ class DefaultConfig(object):
                 value_changed = False
                 for config_key, default_value in default_config_dict.items():
                     if config_key in self._config_dict:
-                        # fill dict and list values
-                        if isinstance(default_value, dict):
-                            for sub_key, sub_default_value in default_value.items():
-                                if sub_key not in self._config_dict[config_key]:
-                                    self._config_dict[config_key][sub_key] = sub_default_value
-                                    value_changed = True
-                        if isinstance(default_value, list):
-                            for element in default_value:
-                                if element not in self._config_dict[config_key]:
-                                    self._config_dict[config_key].append(element)
-                                    value_changed = True
+                        if config_key not in self.keys_not_to_fill_up:
+                            # fill dict and list values
+                            if isinstance(default_value, dict):
+                                for sub_key, sub_default_value in default_value.items():
+                                    if sub_key not in self._config_dict[config_key]:
+                                        self._config_dict[config_key][sub_key] = sub_default_value
+                                        value_changed = True
+                            if isinstance(default_value, list):
+                                for element in default_value:
+                                    if element not in self._config_dict[config_key]:
+                                        self._config_dict[config_key].append(element)
+                                        value_changed = True
                     else:
                         self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(
                             type(self).__name__, config_key, default_value))
