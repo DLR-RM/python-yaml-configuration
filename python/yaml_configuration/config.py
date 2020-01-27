@@ -74,6 +74,8 @@ def config_path(path):
 class DefaultConfig(object):
     """Class to hold and load the global configurations."""
 
+    keys_not_to_fill_up = set()
+
     def __init__(self, default_config, logger_object=None, rel_config_path='yaml_configuration',
                  keys_to_not_fill_up=None):
         self.logger = logger_object
@@ -84,10 +86,6 @@ class DefaultConfig(object):
         self.config_file_path = None
         self.default_config = default_config
         self.path = None
-        if not keys_to_not_fill_up:
-            self.keys_to_not_fill_up = list()
-        else:
-            self.keys_to_not_fill_up = keys_to_not_fill_up
 
         if not default_config:
             self._config_dict = {}
@@ -141,7 +139,7 @@ class DefaultConfig(object):
                 value_changed = False
                 for config_key, default_value in default_config_dict.items():
                     if config_key in self._config_dict:
-                        if config_key not in self.keys_to_not_fill_up:
+                        if config_key not in self.keys_not_to_fill_up:
                             # fill dict and list values
                             if isinstance(default_value, dict):
                                 for sub_key, sub_default_value in default_value.items():
