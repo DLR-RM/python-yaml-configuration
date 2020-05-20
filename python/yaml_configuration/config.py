@@ -102,7 +102,6 @@ class DefaultConfig(object):
 
     def load(self, config_file, path=None):
         try:
-            assert isinstance(config_file, str)
             if path is None:
                 path = os.path.join(os.path.expanduser('~'), '.config', self.rel_config_path)
 
