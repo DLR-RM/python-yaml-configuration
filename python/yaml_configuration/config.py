@@ -9,7 +9,6 @@
 # Benno Voggenreiter <benno.voggenreiter@dlr.de>
 # Franz Steinmetz <franz.steinmetz@dlr.de>
 # Sebastian Brunner <sebastian.brunner@dlr.de>
-
 """
 .. module:: config
    :platform: Unix, Windows
@@ -76,7 +75,10 @@ class DefaultConfig(object):
 
     keys_not_to_fill_up = set()
 
-    def __init__(self, default_config, logger_object=None, rel_config_path='yaml_configuration',
+    def __init__(self,
+                 default_config,
+                 logger_object=None,
+                 rel_config_path='yaml_configuration',
                  keys_to_not_fill_up=None):
         self.logger = logger_object
         self.rel_config_path = rel_config_path
@@ -92,22 +94,34 @@ class DefaultConfig(object):
         else:
             self._config_dict = yaml.load(self.default_config, Loader=FullLoader)
 
+        if keys_to_not_fill_up:
+            if isinstance(keys_to_not_fill_up, str):
+                self.keys_not_to_fill_up.add(keys_to_not_fill_up)
+            else:
+                try:
+                    self.keys_not_to_fill_up = self.keys_not_to_fill_up.union(keys_to_not_fill_up)
+                except TypeError as e:
+                    self.logger.warning(
+                        "Given keys_not_to_fill_up is not iterable. Ignoring given parameter"
+                        f": {e}")
+
     def get_all_keys(self):
         """ Hand list of keys
-        
+
         :return: All keys of the config dictionary
         :rtype: list
         """
         return list(self._config_dict.keys())
 
-    def load(self, config_file, path=None):
+    def load(self, config_file, path=None, update_dictionaries=True):
         try:
             if path is None:
                 path = os.path.join(os.path.expanduser('~'), '.config', self.rel_config_path)
 
             if not os.path.exists(path):
-                self.logger.warn('No configuration found at {0}, using temporary default config and create path on file'
-                                 'system.'.format(path))
+                self.logger.warn(
+                    'No configuration found at {0}, using temporary default config and create path on file'
+                    'system.'.format(path))
                 os.makedirs(path)
 
             config_file_path = os.path.join(path, config_file)
@@ -117,47 +131,56 @@ class DefaultConfig(object):
                 try:
                     default_config_dict = yaml.load(self.default_config, Loader=FullLoader) if self.default_config \
                         else {}
-                    write_dict_to_yaml(default_config_dict, config_file_path, width=80, default_flow_style=False)
+                    write_dict_to_yaml(default_config_dict,
+                                       config_file_path,
+                                       width=80,
+                                       default_flow_style=False)
                     self.config_file_path = config_file_path
                     self.logger.debug("Created config file {0}".format(config_file_path))
                 except Exception as e:
-                    self.logger.error('Could not write to config {0}, using temporary default configuration. '
-                                      'Error: {1}'.format(config_file_path, e))
+                    self.logger.error(
+                        'Could not write to config {0}, using temporary default configuration. '
+                        'Error: {1}'.format(config_file_path, e))
             # Otherwise read the config file from the specified directory
             else:
                 try:
                     self._config_dict = load_dict_from_yaml(config_file_path)
                     self.config_file_path = config_file_path
-                    self.logger.debug("Configuration loaded from {0}".format(os.path.abspath(config_file_path)))
+                    self.logger.debug("Configuration loaded from {0}".format(
+                        os.path.abspath(config_file_path)))
                 except Exception as e:
-                    self.logger.error('Could not read from config {0}, using temporary default configuration. '
-                                      'Error: {1}'.format(config_file_path, e))
+                    self.logger.error(
+                        'Could not read from config {0}, using temporary default configuration. '
+                        'Error: {1}'.format(config_file_path, e))
 
                 # Check if all attributes of the default config exists and introduce them if missing
-                default_config_dict = yaml.load(self.default_config, Loader=FullLoader) if self.default_config else {}
+                default_config_dict = yaml.load(self.default_config,
+                                                Loader=FullLoader) if self.default_config else {}
                 value_changed = False
                 for config_key, default_value in default_config_dict.items():
                     if config_key in self._config_dict:
                         if config_key not in self.keys_not_to_fill_up:
                             # fill dict and list values
                             if isinstance(default_value, dict):
-                                for sub_key, sub_default_value in default_value.items():
-                                    if sub_key not in self._config_dict[config_key]:
-                                        self._config_dict[config_key][sub_key] = sub_default_value
-                                        value_changed = True
+                                self._config_dict[config_key].update(
+                                    (k, v) for k, v in default_value.items()
+                                    if k not in self._config_dict[config_key])
+                                value_changed = True
                             if isinstance(default_value, list):
                                 for element in default_value:
                                     if element not in self._config_dict[config_key]:
                                         self._config_dict[config_key].append(element)
                                         value_changed = True
                     else:
-                        self.logger.info("{0} use default-config-file parameter '{1}': {2}.".format(
-                            type(self).__name__, config_key, default_value))
+                        self.logger.info(
+                            "{0} use default-config-file parameter '{1}': {2}.".format(
+                                type(self).__name__, config_key, default_value))
                         self._config_dict[config_key] = default_value
                         value_changed = True
                 if value_changed:
                     self.logger.info("The config has been updated by the default config "
-                                      "and is saved to disk (path: {}).".format(str(self.config_file_path)))
+                                     "and is saved to disk (path: {}).".format(
+                                         str(self.config_file_path)))
                     self.save_configuration()
 
         finally:
@@ -187,10 +210,14 @@ class DefaultConfig(object):
 
     def save_configuration(self):
         if self.config_file_path:
-            write_dict_to_yaml(self._config_dict, self.config_file_path, width=80, default_flow_style=False)
+            write_dict_to_yaml(self._config_dict,
+                               self.config_file_path,
+                               width=80,
+                               default_flow_style=False)
             self.logger.debug("Saved configuration to {0}".format(self.config_file_path))
         else:
-            self.logger.warning("The config_file_path needs to be set for {0}".format(self.__class__.__name__))
+            self.logger.warning("The config_file_path needs to be set for {0}".format(
+                self.__class__.__name__))
 
 
 class ConfigError(Exception):
