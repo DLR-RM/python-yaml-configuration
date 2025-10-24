@@ -9,9 +9,9 @@
 # Franz Steinmetz <franz.steinmetz@dlr.de>
 # Sebastian Brunner <sebastian.brunner@dlr.de>
 
-from pkg_resources import get_distribution, DistributionNotFound
+from importlib.metadata import version, PackageNotFoundError
 
 try:
-    __version__ = get_distribution("yaml_configuration").version
-except DistributionNotFound:
+    __version__ = version("yaml_configuration")
+except PackageNotFoundError:
     __version__ = "unknown"
