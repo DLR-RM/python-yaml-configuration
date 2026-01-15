@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from conans import ConanFile, tools
+from conan import ConanFile, tools
 
 
 class python_yaml_configurationConan(ConanFile):
